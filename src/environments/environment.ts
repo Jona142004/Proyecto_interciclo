@@ -8,5 +8,5 @@ export const environment = {
     messagingSenderId: "10813113239",
     appId: "1:10813113239:web:a501ce351da51fde903ad2"
   },
-  strapiUrl: "https://holy-purpose-7c0a2b8602.strapiapp.com"
+  strapiUrl: "https://holy-purpose-7c0a2b8602.strapiapp.com/admin"
 };
