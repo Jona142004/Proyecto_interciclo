@@ -1,0 +1,95 @@
+@if (cargando()) {
+  <div class="page-loading" role="status" aria-live="polite">
+    <div class="spinner" aria-hidden="true"></div>
+    <p>Cargando proyecto...</p>
+  </div>
+} @else if (error()) {
+  <div class="page-error" role="alert">
+    <p>{{ error() }}</p>
+    <a routerLink="/" class="btn btn-primary">Volver al inicio</a>
+  </div>
+} @else if (proyecto()) {
+  <div class="detalle-page">
+    <div class="detalle-hero">
+      @if (mediaUrl(proyecto()!.imagenPrincipal)) {
+        <img [src]="mediaUrl(proyecto()!.imagenPrincipal)" [alt]="proyecto()!.nombre" class="hero-img" />
+      } @else {
+        <div class="hero-placeholder" aria-hidden="true">
+          <span>{{ proyecto()!.nombre.charAt(0) }}</span>
+        </div>
+      }
+      <div class="hero-overlay">
+        <div class="hero-badges">
+          <span class="badge badge-tipo">{{ proyecto()!.tipo }}</span>
+          @if (proyecto()!.destacado) {
+            <span class="badge badge-destacado">★ Destacado</span>
+          }
+        </div>
+        <h1 class="hero-title">{{ proyecto()!.nombre }}</h1>
+      </div>
+    </div>
+
+    <div class="detalle-content">
+      <div class="detalle-main">
+        <section aria-labelledby="desc-title">
+          <h2 id="desc-title" class="section-heading">Descripción</h2>
+          <p class="desc-completa">{{ proyecto()!.descripcionCompleta }}</p>
+        </section>
+
+        @if (proyecto()!.tecnologias && proyecto()!.tecnologias!.length > 0) {
+          <section aria-labelledby="techs-title">
+            <h2 id="techs-title" class="section-heading">Tecnologías utilizadas</h2>
+            <div class="techs-list" role="list">
+              @for (tech of proyecto()!.tecnologias!; track tech.id) {
+                <div class="tech-item" role="listitem">
+                  @if (mediaUrl(tech.logo)) {
+                    <img [src]="mediaUrl(tech.logo)" [alt]="tech.nombre" class="tech-logo" />
+                  }
+                  <span class="tech-nombre">{{ tech.nombre }}</span>
+                </div>
+              }
+            </div>
+          </section>
+        }
+
+        @if (proyecto()!.programadors && proyecto()!.programadors!.length > 0) {
+          <section aria-labelledby="devs-title">
+            <h2 id="devs-title" class="section-heading">Desarrolladores</h2>
+            <div class="devs-list" role="list">
+              @for (dev of proyecto()!.programadors!; track dev.id) {
+                <a [routerLink]="['/programadores', dev.slug]" class="dev-chip" role="listitem">
+                  {{ dev.nombreCompleto }}
+                </a>
+              }
+            </div>
+          </section>
+        }
+      </div>
+
+      <aside class="detalle-sidebar" aria-label="Información adicional">
+        <div class="sidebar-card">
+          <h3 class="sidebar-title">Enlaces</h3>
+          <div class="sidebar-links">
+            @if (proyecto()!.repositorio) {
+              <a [href]="proyecto()!.repositorio" target="_blank" rel="noopener noreferrer" class="sidebar-link">
+                <span aria-hidden="true">⌨</span> Ver repositorio
+              </a>
+            }
+            @if (proyecto()!.demo) {
+              <a [href]="proyecto()!.demo!" target="_blank" rel="noopener noreferrer" class="sidebar-link">
+                <span aria-hidden="true">🌐</span> Ver demo en vivo
+              </a>
+            }
+          </div>
+          <div class="sidebar-meta">
+            <div class="meta-row">
+              <span class="meta-label">Tipo</span>
+              <span class="meta-value">{{ proyecto()!.tipo }}</span>
+            </div>
+          </div>
+        </div>
+        <a routerLink="/" class="btn btn-outline mt-1">← Volver</a>
+      </aside>
+    </div>
+  </div>
+}

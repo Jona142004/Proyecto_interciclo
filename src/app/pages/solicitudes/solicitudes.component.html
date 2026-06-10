@@ -1,0 +1,96 @@
+<div class="solicitudes-page" role="main">
+  <div class="page-inner">
+    <div class="page-header">
+      <h1 class="page-title">
+        @if (esProgramador()) {
+          Solicitudes recibidas
+        } @else {
+          Mis solicitudes
+        }
+      </h1>
+      @if (esProgramador() && programadorActual()) {
+        <p class="page-subtitle">Como <strong>{{ programadorActual()!.nombreCompleto }}</strong></p>
+      }
+    </div>
+
+    @if (cargando()) {
+      <div class="loading-state" role="status" aria-live="polite">
+        <div class="spinner" aria-hidden="true"></div>
+        <p>Cargando solicitudes...</p>
+      </div>
+    } @else {
+      @if (solicitudes().length === 0) {
+        <div class="empty-state">
+          <p class="empty-icon" aria-hidden="true">📭</p>
+          <p>No hay solicitudes aún.</p>
+        </div>
+      } @else {
+        <div class="solicitudes-lista" role="list">
+          @for (sol of solicitudes(); track sol.id) {
+            <article class="solicitud-card" role="listitem" [attr.data-estado]="sol.estado">
+              <div class="card-top">
+                <div class="card-info">
+                  <h2 class="sol-nombre">{{ sol.nombreSolicitante }}</h2>
+                  <p class="sol-correo">{{ sol.correoSolicitante }}</p>
+                  <span class="sol-fecha">{{ formatFecha(sol) }}</span>
+                </div>
+                <div class="card-meta">
+                  <span class="badge-estado" [class.estado-pendiente]="sol.estado === 'Pendiente'" [class.estado-respondida]="sol.estado === 'Respondida'">
+                    {{ sol.estado }}
+                  </span>
+                  @if (!esProgramador()) {
+                    <p class="sol-programador">Para: <strong>{{ sol.programadorNombre }}</strong></p>
+                  }
+                </div>
+              </div>
+
+              <div class="card-desc">
+                <p class="desc-label">Descripción del proyecto:</p>
+                <p class="desc-text">{{ sol.descripcionProyecto }}</p>
+              </div>
+
+              @if (!esProgramador() && sol.respuesta) {
+                <div class="respuesta-view" role="complementary" aria-label="Respuesta del programador">
+                  <p class="respuesta-label">Respuesta del programador:</p>
+                  <p class="respuesta-text">{{ sol.respuesta }}</p>
+                </div>
+              }
+
+              @if (esProgramador()) {
+                <div class="respuesta-form" aria-label="Formulario de respuesta">
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label [for]="'estado-' + sol.id" class="form-label">Estado</label>
+                      <select [id]="'estado-' + sol.id" [(ngModel)]="estadoEdit[sol.id!]" class="form-input form-select">
+                        <option value="Pendiente">Pendiente</option>
+                        <option value="Respondida">Respondida</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label [for]="'respuesta-' + sol.id" class="form-label">Respuesta / Observación</label>
+                    <textarea
+                      [id]="'respuesta-' + sol.id"
+                      [(ngModel)]="respuestaEdit[sol.id!]"
+                      class="form-input form-textarea"
+                      rows="3"
+                      placeholder="Escribe tu respuesta para este solicitante..."
+                    ></textarea>
+                  </div>
+                  <div class="form-actions">
+                    <button type="button" class="btn btn-primary" (click)="guardarRespuesta(sol)" [disabled]="guardandoId() === sol.id">
+                      @if (guardandoId() === sol.id) { Guardando... } @else { Guardar }
+                    </button>
+                    @if (mensajeGuardado() && guardandoId() !== sol.id) {
+                      <span class="save-msg" role="status">{{ mensajeGuardado() }}</span>
+                    }
+                  </div>
+                </div>
+              }
+            </article>
+          }
+        </div>
+      }
+    }
+  </div>
+</div>

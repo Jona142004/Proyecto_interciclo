@@ -1,0 +1,105 @@
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero-content">
+    <h1 id="hero-title" class="hero-title">Soluciones digitales a tu medida</h1>
+    <p class="hero-subtitle">
+      Somos un equipo de desarrolladores apasionados por crear experiencias web modernas, escalables y accesibles.
+      Desde aplicaciones móviles hasta sistemas empresariales, transformamos tus ideas en realidad.
+    </p>
+    <div class="hero-actions">
+      @if (auth.estaAutenticado()) {
+        <a routerLink="/solicitud" class="btn btn-primary">Solicitar servicio</a>
+      } @else {
+        <a routerLink="/solicitud" class="btn btn-primary">Solicitar servicio</a>
+        <a routerLink="/registro" class="btn btn-outline">Crear cuenta</a>
+      }
+    </div>
+  </div>
+  <div class="hero-visual" aria-hidden="true">
+    <div class="hero-shape">
+      <span class="code-symbol">&lt;/&gt;</span>
+    </div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="equipo-title">
+  <div class="section-inner">
+    <div class="section-header">
+      <h2 id="equipo-title" class="section-title">Nuestro equipo</h2>
+      <p class="section-subtitle">Conoce a los desarrolladores detrás de cada proyecto</p>
+    </div>
+    @if (cargandoProgramadores()) {
+      <div class="loading-state" role="status" aria-live="polite">
+        <div class="spinner" aria-hidden="true"></div>
+        <p>Cargando equipo...</p>
+      </div>
+    } @else if (errorProgramadores()) {
+      <div class="error-state" role="alert">{{ errorProgramadores() }}</div>
+    } @else if (programadores().length === 0) {
+      <div class="empty-state">No hay programadores disponibles.</div>
+    } @else {
+      <div class="grid grid-2">
+        @for (prog of programadores(); track prog.id) {
+          <app-programador-card [programador]="prog" />
+        }
+      </div>
+    }
+  </div>
+</section>
+
+<section class="section section-alt" aria-labelledby="servicios-title">
+  <div class="section-inner">
+    <div class="section-header">
+      <h2 id="servicios-title" class="section-title">Nuestros servicios</h2>
+      <p class="section-subtitle">Áreas de especialización que ofrecemos</p>
+    </div>
+    @if (cargandoServicios()) {
+      <div class="loading-state" role="status" aria-live="polite">
+        <div class="spinner" aria-hidden="true"></div>
+        <p>Cargando servicios...</p>
+      </div>
+    } @else if (errorServicios()) {
+      <div class="error-state" role="alert">{{ errorServicios() }}</div>
+    } @else if (servicios().length === 0) {
+      <div class="empty-state">No hay servicios disponibles.</div>
+    } @else {
+      <div class="grid grid-3">
+        @for (serv of servicios(); track serv.id) {
+          <app-servicio-card [servicio]="serv" />
+        }
+      </div>
+    }
+  </div>
+</section>
+
+<section class="section" aria-labelledby="proyectos-title">
+  <div class="section-inner">
+    <div class="section-header">
+      <h2 id="proyectos-title" class="section-title">Proyectos destacados</h2>
+      <p class="section-subtitle">Algunos de nuestros trabajos más relevantes</p>
+    </div>
+    @if (cargandoProyectos()) {
+      <div class="loading-state" role="status" aria-live="polite">
+        <div class="spinner" aria-hidden="true"></div>
+        <p>Cargando proyectos...</p>
+      </div>
+    } @else if (errorProyectos()) {
+      <div class="error-state" role="alert">{{ errorProyectos() }}</div>
+    } @else if (proyectosDestacados().length === 0) {
+      <div class="empty-state">No hay proyectos destacados.</div>
+    } @else {
+      <div class="grid grid-3">
+        @for (proj of proyectosDestacados(); track proj.id) {
+          <app-proyecto-card [proyecto]="proj" />
+        }
+      </div>
+    }
+  </div>
+</section>
+
+<section class="section-contacto" aria-labelledby="contacto-title">
+  <div class="section-inner contacto-inner">
+    <h2 id="contacto-title" class="contacto-title">¿Tienes un proyecto en mente?</h2>
+    <p class="contacto-desc">Cuéntanos sobre tu idea y uno de nuestros desarrolladores se pondrá en contacto contigo.</p>
+    <a routerLink="/solicitud" class="btn btn-primary btn-lg">Enviar solicitud</a>
+  </div>
+</section>

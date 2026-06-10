@@ -1,0 +1,26 @@
+#main-content {
+  min-height: calc(100vh - 64px - 80px);
+}
+
+.site-footer {
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  padding: 1.5rem 2rem;
+}
+
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.footer-copy,
+.footer-tagline {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  margin: 0;
+}

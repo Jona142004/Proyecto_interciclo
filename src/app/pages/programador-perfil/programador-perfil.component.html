@@ -1,0 +1,67 @@
+@if (cargando()) {
+  <div class="page-loading" role="status" aria-live="polite">
+    <div class="spinner" aria-hidden="true"></div>
+    <p>Cargando perfil...</p>
+  </div>
+} @else if (error()) {
+  <div class="page-error" role="alert">
+    <p>{{ error() }}</p>
+    <a routerLink="/" class="btn btn-primary">Volver al inicio</a>
+  </div>
+} @else if (programador()) {
+  <div class="perfil-page">
+    <section class="perfil-hero" aria-labelledby="perfil-nombre">
+      <div class="perfil-hero-inner">
+        <div class="perfil-avatar">
+          @if (mediaUrl(programador()!.fotoPerfil)) {
+            <img [src]="mediaUrl(programador()!.fotoPerfil)" [alt]="programador()!.nombreCompleto" class="avatar-img" />
+          } @else {
+            <div class="avatar-placeholder" aria-hidden="true">
+              {{ programador()!.nombreCompleto.charAt(0) }}
+            </div>
+          }
+        </div>
+        <div class="perfil-info">
+          <h1 id="perfil-nombre" class="perfil-nombre">{{ programador()!.nombreCompleto }}</h1>
+          <p class="perfil-especialidad">{{ programador()!.especialidad }}</p>
+          <p class="perfil-desc">{{ programador()!.descripcionCompleta }}</p>
+          <div class="perfil-links" role="list" aria-label="Enlaces de contacto">
+            @if (programador()!.correoContacto) {
+              <a [href]="'mailto:' + programador()!.correoContacto" class="link-item" role="listitem" aria-label="Correo de contacto">
+                <span aria-hidden="true">✉</span> {{ programador()!.correoContacto }}
+              </a>
+            }
+            @if (programador()!.github) {
+              <a [href]="programador()!.github" target="_blank" rel="noopener noreferrer" class="link-item" role="listitem" aria-label="GitHub">
+                <span aria-hidden="true">⌨</span> GitHub
+              </a>
+            }
+            @if (programador()!.linkedin) {
+              <a [href]="programador()!.linkedin" target="_blank" rel="noopener noreferrer" class="link-item" role="listitem" aria-label="LinkedIn">
+                <span aria-hidden="true">💼</span> LinkedIn
+              </a>
+            }
+          </div>
+          <div class="perfil-actions">
+            <a [routerLink]="['/solicitud']" class="btn btn-primary">Solicitar servicio</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="proyectos-section" aria-labelledby="proyectos-title">
+      <div class="section-inner">
+        <h2 id="proyectos-title" class="section-title">Proyectos</h2>
+        @if (proyectos().length === 0) {
+          <div class="empty-state">Este programador aún no tiene proyectos publicados.</div>
+        } @else {
+          <div class="grid grid-3">
+            @for (proj of proyectos(); track proj.id) {
+              <app-proyecto-card [proyecto]="proj" />
+            }
+          </div>
+        }
+      </div>
+    </section>
+  </div>
+}

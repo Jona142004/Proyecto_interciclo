@@ -1,12 +1,12 @@
-import { Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { NavbarComponent } from './components/navbar/navbar.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [RouterOutlet, NavbarComponent],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrl: './app.css',
 })
-export class App {
-  protected readonly title = signal('proyecto');
-}
+export class App {}

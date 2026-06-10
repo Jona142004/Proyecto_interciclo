@@ -1,0 +1,94 @@
+<div class="form-page" role="main">
+  <div class="form-container">
+    @if (exito()) {
+      <div class="success-state" role="status">
+        <div class="success-icon" aria-hidden="true">✓</div>
+        <h2 class="success-title">¡Solicitud enviada!</h2>
+        <p class="success-desc">Tu solicitud fue enviada exitosamente. El programador se pondrá en contacto contigo pronto.</p>
+        <button class="btn btn-primary" (click)="nuevaSolicitud()" type="button">Enviar otra solicitud</button>
+      </div>
+    } @else {
+      <div class="form-header">
+        <h1 class="form-title">Solicitar servicio</h1>
+        <p class="form-subtitle">Completa el formulario y nos pondremos en contacto contigo</p>
+      </div>
+      <form [formGroup]="form" (ngSubmit)="enviar()" class="solicitud-form" novalidate>
+        <div class="form-group">
+          <label for="nombre" class="form-label">Tu nombre completo <span aria-hidden="true">*</span></label>
+          <input
+            id="nombre"
+            type="text"
+            formControlName="nombreSolicitante"
+            class="form-input"
+            [class.input-error]="campoInvalido('nombreSolicitante')"
+            autocomplete="name"
+            aria-describedby="nombre-error"
+            placeholder="Juan Pérez"
+          />
+          @if (campoInvalido('nombreSolicitante')) {
+            <span id="nombre-error" class="field-error" role="alert">Ingresa tu nombre (mínimo 3 caracteres).</span>
+          }
+        </div>
+        <div class="form-group">
+          <label for="correo" class="form-label">Tu correo de contacto <span aria-hidden="true">*</span></label>
+          <input
+            id="correo"
+            type="email"
+            formControlName="correoSolicitante"
+            class="form-input"
+            [class.input-error]="campoInvalido('correoSolicitante')"
+            autocomplete="email"
+            aria-describedby="correo-error"
+            placeholder="tu@correo.com"
+          />
+          @if (campoInvalido('correoSolicitante')) {
+            <span id="correo-error" class="field-error" role="alert">Ingresa un correo válido.</span>
+          }
+        </div>
+        <div class="form-group">
+          <label for="descripcion" class="form-label">Descripción del proyecto <span aria-hidden="true">*</span></label>
+          <textarea
+            id="descripcion"
+            formControlName="descripcionProyecto"
+            class="form-input form-textarea"
+            [class.input-error]="campoInvalido('descripcionProyecto')"
+            rows="5"
+            aria-describedby="desc-error"
+            placeholder="Describe tu idea de proyecto, qué necesitas desarrollar, funcionalidades esperadas..."
+          ></textarea>
+          @if (campoInvalido('descripcionProyecto')) {
+            <span id="desc-error" class="field-error" role="alert">La descripción debe tener al menos 20 caracteres.</span>
+          }
+        </div>
+        <div class="form-group">
+          <label for="programador" class="form-label">Programador <span aria-hidden="true">*</span></label>
+          @if (cargandoProgramadores()) {
+            <div class="loading-inline" role="status">Cargando programadores...</div>
+          } @else {
+            <select
+              id="programador"
+              formControlName="programadorSlug"
+              class="form-input form-select"
+              [class.input-error]="campoInvalido('programadorSlug')"
+              aria-describedby="prog-error"
+            >
+              <option value="">-- Selecciona un programador --</option>
+              @for (prog of programadores(); track prog.id) {
+                <option [value]="prog.slug">{{ prog.nombreCompleto }} — {{ prog.especialidad }}</option>
+              }
+            </select>
+          }
+          @if (campoInvalido('programadorSlug')) {
+            <span id="prog-error" class="field-error" role="alert">Selecciona un programador.</span>
+          }
+        </div>
+        @if (errorMsg()) {
+          <div class="form-error" role="alert">{{ errorMsg() }}</div>
+        }
+        <button type="submit" class="btn btn-primary btn-block" [disabled]="cargando()">
+          @if (cargando()) { Enviando... } @else { Enviar solicitud }
+        </button>
+      </form>
+    }
+  </div>
+</div>
