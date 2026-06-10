@@ -14,6 +14,11 @@ import {
 
 export function mediaUrl(media: StrapiMedia | null | undefined): string {
   if (!media) return '';
+
+  if (media.url.startsWith('http')) {
+    return media.url;
+  }
+
   return environment.strapiUrl + media.url;
 }
 
